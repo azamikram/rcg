@@ -5,7 +5,7 @@ import time
 import argparse
 from typing import List
 
-import pandas as pd
+import networkx as nx
 from causallearn.graph.Edge import Edge
 from causallearn.graph.Graph import Graph
 from causallearn.graph.Endpoint import Endpoint
@@ -124,8 +124,24 @@ def rank_variables(n_df, a_df, graph: GeneralGraph, l):
     end = current_time() - start
     return {'time': end, 'root_cause': result, 'tests': n_df.shape[1] - 1}
 
-def run(n_df, a_df, src_dir, l, k=-1, oracle=False):
-    G = bu.load_graph(f'{src_dir}/{bu.get_prior_graph_name(k, oracle)}')['graph']
+def _nx_to_g_graph(graph: nx.DiGraph) -> GeneralGraph:
+    from causallearn.graph.Edge import Edge
+    from causallearn.graph.GraphNode import GraphNode
+
+    _nodes = [GraphNode(x) for x in graph.nodes]
+    G = GeneralGraph(_nodes)
+    for u, v in graph.edges():
+        _u = G.get_node(u)
+        _v = G.get_node(v)
+        G.add_edge(Edge(_u, _v, Endpoint.TAIL, Endpoint.ARROW))
+    return G
+
+def run(n_df, a_df, src_dir, l, k=-1, oracle=False, dag=False):
+    if dag:
+        dag: nx.DiGraph = bu.load_graph(f'{src_dir}/{bu.GROUND_TRUTH_NX_GRAPH}')
+        G = _nx_to_g_graph(dag)
+    else:
+        G = bu.load_graph(f'{src_dir}/{bu.get_prior_graph_name(k, oracle)}')['graph']
     return rank_variables(n_df, a_df, G, l)
 
 
