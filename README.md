@@ -1,9 +1,12 @@
-Follow the following steps to run M-IGS and RCG(CPDAG)
+Follow the following to reproduce the main results from the paper.
 
-1. Generate data: Use `graph_gen.py` to generate synthetic data for an incident. To change any tuneable parameter, please specify the changes in `config/graph_gen.yaml`.
+1. Generate data: Use `data_generator.py` to generate the dataset. To change any tuneable parameter, please specify the changes in `config/data_gen.yaml`.
+2. Learn the Prior: For RCG(CPDAG), we first need to learn the true CPDAG. Use `learn_prior.yaml` to learn ground truth CPDAG with `k=[-1]`. You can specify multiple values of `k`.
+
+<!-- 1. Generate data: Use `graph_gen.py` to generate synthetic data for an incident. To change any tuneable parameter, please specify the changes in `config/graph_gen.yaml`.
 2. Learn a Prior: For RCG(CPDAG), we first need to learn the true CPDAG. Use `learn_prior.py` to learn ground truth CPDAG. The script takes `--path` as the argument.
 3. RCG(CPDAG): Run `rcg.py` with `--path` to see the result of RCG(CPDAG).
-4. M-IGS: Run `m_igs.py` with --path to see the result of M-IGS. The script takes an additional parameter `--oracle` to specify whether the algorithm should use d-separation CI test (ground truth) or the data.
+4. M-IGS: Run `m_igs.py` with --path to see the result of M-IGS. The script takes an additional parameter `--oracle` to specify whether the algorithm should use d-separation CI test (ground truth) or the data. -->
 
 ### Files and Folders
 - `graph_gen.py` generates data for a single incident. It uses `config/graph_gen.yaml` as the input.

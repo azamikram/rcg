@@ -31,7 +31,6 @@ class DataGenConf:
 
 @dataclass
 class LearnPriorConf:
-    source: str
     k: List[int]
     oracle: bool
     threading: bool

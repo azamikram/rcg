@@ -1,53 +1,48 @@
 #!/usr/bin/env python3
 
-import time
 import argparse
+from multiprocessing import Pool
 
-import networkx as nx
-
-from causallearn.graph.Dag import Dag
-from causallearn.utils.DAG2CPDAG import dag2cpdag
-from causallearn.graph.GraphNode import GraphNode
-from causallearn.graph.Edge import Edge
-from causallearn.graph.Endpoint import Endpoint
-
+import learn_kess_g
 from utils import base_utils as bu
+from config import LearnPriorConf, load_config
 
-VERBOSE = True
-if not VERBOSE:
-    import warnings
-    warnings.filterwarnings('ignore')
-
-CORES = 1
-K = 0
-BINS = 5
-PRE_PROCESS = False
-ORACLE = False
-CI_TEST = 'chisq'
-ALPHA = 0.05
-
-current_time = lambda: time.perf_counter() * 1e3
+DEFAULT_CONFIG = 'learn_prior.yaml'
 
 
-def learn(path):
-    nx_graph: nx.DiGraph = bu.load_graph(f'{path}/{bu.GROUND_TRUTH_NX_GRAPH}')
-    node_map = {x: GraphNode(x) for x in nx_graph.nodes}
-    dag: Dag = Dag(list(node_map.values()))
-    for u, v in nx_graph.edges():
-        dag.add_edge(Edge(node_map[u], node_map[v], Endpoint.TAIL, Endpoint.ARROW))
-    G = dag2cpdag(dag)
+def learn_cpc(src_dir, cfg: LearnPriorConf):
+    if cfg.threading:
+        t_pool = Pool(cfg.workers)
 
-    cg_path = f'{path}/{bu.get_prior_graph_name(-1, True)}'
-    bu.store_causal_learn_graph(G, -1, cg_path)
-    return G
+    for _k in cfg.k:
+        if cfg.verbose:
+            print(f'Learning prior graph for k={_k}')
+        for node, n_path in bu.dir_iterator(src_dir):
+            if cfg.verbose:
+                print(f'Working on {node} nodes')
+            if cfg.threading:
+                future = list()
+            for _, i_path in bu.dir_iterator(n_path):
+                if cfg.threading:
+                    future.append(t_pool.starmap_async(learn_kess_g.learn,
+                                                       [(i_path, None, _k, cfg.oracle, False, False)]))
+                else:
+                    learn_kess_g.learn(i_path, k=_k, oracle=cfg.oracle,
+                                       pre_process=False, verbose=False)
+            if cfg.threading:
+                for f in future: f.get()
+    if cfg.threading:
+        t_pool.close()
+        t_pool.join()
+
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Generates Oracle CPDAG from a dataset')
-    parser.add_argument('--path', type=str, required=True, help='Path to the experiment data')
+    parser = argparse.ArgumentParser(description='Generates prior graphs from a dataset')
+    parser.add_argument('--path', type=str, required=True, help='Path to the data')
     args = parser.parse_args()
     path = args.path
+    cfg: LearnPriorConf = load_config(DEFAULT_CONFIG, LearnPriorConf)
 
-    s_time = current_time()
-    learn(path)
-    e_time = current_time()
-    print(f'Learning the essential graph took {e_time - s_time}')
+    s_time = bu.current_time()
+    learn_cpc(path, cfg)
+    print(f'Learning prior took {round(bu.current_time() - s_time, 3)} sec')

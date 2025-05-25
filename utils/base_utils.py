@@ -1,3 +1,4 @@
+import os
 import time
 import pickle
 import datetime
@@ -41,6 +42,7 @@ VERBOSE = False
 
 current_time = lambda: time.perf_counter()
 
+
 def readable_time():
     return datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
 
@@ -64,6 +66,21 @@ def load_graph(path):
         graph = pickle.load(f)
     return graph
 load_data = load_graph
+
+# Iterate over all the files in the given directory
+# and output directories that have integer as their name
+def dir_iterator(path):
+    sorted_files = list()
+    for f in os.listdir(path):
+        try:
+            sorted_files.append(int(f))
+        except:
+            pass
+    sorted_files.sort()
+    for f in sorted_files:
+        p_path = f'{path}/{f}'
+        if not os.path.isdir(p_path): continue
+        yield(f, p_path)
 
 def add_fnode(normal_df, anomalous_df):
     normal_df[F_NODE] = 0
