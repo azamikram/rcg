@@ -208,8 +208,6 @@ def generate_graph(cfg: GraphGenConf, src=None):
     inject_failure(anomalous_bn, an_node)
     draw_and_save(anomalous_bn, f'{src_dir}/{bu.ANOMALOUS_DATA}', cfg.samples, cfg.nodes)
     if cfg.verbose:
-        print(f'Before intervention {normal_bn.cpt(an_node)}')
-        print(f'After intervention {anomalous_bn.cpt(an_node)}')
         print(f"Data is saved at {src_dir}")
         gum.saveBN(normal_bn, f'{src_dir}/{bu.NORMAL_BN}')
         gum.saveBN(anomalous_bn, f'{src_dir}/{bu.ANOMALOUS_BN}')
