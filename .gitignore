@@ -1,0 +1,8 @@
+*.pdf
+*.pyc
+*.pkl
+data/
+datasets/
+individual-graphs/
+exp_results/
+env/
