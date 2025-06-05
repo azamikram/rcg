@@ -1,7 +1,9 @@
 Follow the following to reproduce the main results from the paper.
 
 1. Generate data: Use `data_generator.py` to generate the dataset. To change any tuneable parameter, please specify the changes in `config/data_gen.yaml`.
-2. Learn the Prior: For RCG(CPDAG), we first need to learn the true CPDAG. Use `learn_prior.yaml` to learn ground truth CPDAG with `k=[-1]`. You can specify multiple values of `k`.
+2. Learn the prior: For RCG(CPDAG), we first need to learn the true CPDAG. Use `learn_prior.yaml` to learn ground truth CPDAG with `k=[-1]`. You can specify multiple values of `k`.
+3. Run the experiment: Use `compare_rcd.py` to run all the baselines including RCG to generate the results. There are two types of experiments that are possible: Varying the number of nodes and checking top-$l$ accuracy (Figure 3(a) and Figure 8) and varying the number of anomalous samples and checking top-1 accuracy (Figure 3(b) and Figure 9). Use `--exp` to switch between the types.
+
 
 <!-- 1. Generate data: Use `graph_gen.py` to generate synthetic data for an incident. To change any tuneable parameter, please specify the changes in `config/graph_gen.yaml`.
 2. Learn a Prior: For RCG(CPDAG), we first need to learn the true CPDAG. Use `learn_prior.py` to learn ground truth CPDAG. The script takes `--path` as the argument.
@@ -17,3 +19,4 @@ Follow the following to reproduce the main results from the paper.
 ### Additional Notes
 - We typically use chi-square `chisq` as the main CI test which works for discrete data. For our synthetic data experiments, we generate discrete data (`states` in `config/graph_gen.yaml`). But for Sock-shop or real-world dataset, we have to discretize the data. For that we use the variables `BINS`.
 - For application specific data, sometimes we also need to remove a few variables such as the timestamp or variables with constant values. Fro that we generally use the boolean variable named `PRE_PROCESS`.
+- Most of our scripts are parallalizeable. Use `THREADING` and `WORKERS` to utilize it.
