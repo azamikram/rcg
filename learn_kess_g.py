@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import time
 import argparse
 
@@ -17,19 +15,12 @@ from causallearn.graph.Endpoint import Endpoint
 from para_kpc.kPC_fas import kpc
 from utils import base_utils as bu
 
-VERBOSE = True
-if not VERBOSE:
-    import warnings
-    warnings.filterwarnings('ignore')
-
 K = -1 # -1 for CPDAG
 ORACLE = True
 CI_TEST = 'chisq'
 ALPHA = 0.05
 
 CORES = 1
-BINS = 5
-PRE_PROCESS = False
 
 current_time = lambda: time.perf_counter() * 1e3
 
@@ -46,8 +37,7 @@ def _learn_true_cpdag(path):
     bu.store_causal_learn_graph(G, -1, cg_path)
     return G
 
-def learn(path, df=None, k=0, oracle=False, pre_process=False,
-          verbose=False, store=True):
+def learn(path, df=None, k=0, oracle=False, store=True):
     if oracle and k == -1:
         return _learn_true_cpdag(path)
 
@@ -61,21 +51,15 @@ def learn(path, df=None, k=0, oracle=False, pre_process=False,
     else:
         if df is None:
             df = pd.read_csv(f'{path}/{bu.NORMAL_DATA}')
-        if pre_process:
-            df = bu.preprocess_sockshop(df, bins=BINS)
-
         G, _ = kpc(df.to_numpy(), independence_test_method=CI_TEST,
                    n=len(df.columns), alpha=ALPHA, k=k,
                    node_names=df.columns.tolist(),
                    parallel=True, s=None, batch=None, p_cores=CORES)
-
     if store:
         cg_path = f'{path}/{bu.get_prior_graph_name(k, oracle)}'
         bu.store_causal_learn_graph(G, k, cg_path)
-        if pre_process:
-            with open(f'{path}/{k}-{bu.SOCKSHOP_DATA_INFO}', 'wb') as f:
-                pickle.dump({'nodes': G.get_node_names(), 'bins': BINS}, f)
     return G
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generates CPDAG from a dataset')
@@ -84,6 +68,6 @@ if __name__ == '__main__':
     path = args.path
 
     s_time = current_time()
-    learn(path, k=K, oracle=ORACLE, pre_process=PRE_PROCESS, verbose=VERBOSE, store=True)
+    learn(path, k=K, oracle=ORACLE, store=True)
     e_time = current_time()
     print(f'Learning the essential graph took {e_time - s_time}')

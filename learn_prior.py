@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import argparse
 from multiprocessing import Pool
 
@@ -25,10 +23,9 @@ def learn_cpc(src_dir, cfg: LearnPriorConf):
             for _, i_path in bu.dir_iterator(n_path):
                 if cfg.threading:
                     future.append(t_pool.starmap_async(learn_kess_g.learn,
-                                                       [(i_path, None, _k, cfg.oracle, False, False)]))
+                                                       [(i_path, None, _k, cfg.oracle)]))
                 else:
-                    learn_kess_g.learn(i_path, k=_k, oracle=cfg.oracle,
-                                       pre_process=False, verbose=False)
+                    learn_kess_g.learn(i_path, k=_k, oracle=cfg.oracle)
             if cfg.threading:
                 for f in future: f.get()
     if cfg.threading:
