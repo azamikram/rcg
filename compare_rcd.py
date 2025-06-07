@@ -13,7 +13,7 @@ import mutual_info as mt
 # import cmi
 # import mi_cmi
 # import mi_graph
-# import igs
+import m_igs
 import page_rank
 # import toca
 # import random_selection
@@ -29,15 +29,19 @@ PAGERANK = 'page_rank'
 BARO = 'baro'
 MUTUAL_INFO = 'mutual_info'
 RCD = 'rcd'
+M_IGS = 'm_igs'
 SMOOTH_CH = 'smooth'
+RCG_CPDAG = 'rcg_cpdag'
 RCG_DAG = 'rcg_dag'
 
 BASELINES = [
     # PAGERANK,
-    BARO,
-    MUTUAL_INFO,
-    RCD,
+    # BARO,
+    # MUTUAL_INFO,
+    # RCD,
     # SMOOTH_CH,
+    # M_IGS,
+    RCG_CPDAG
     # RCG_DAG,
 ]
 
@@ -66,28 +70,39 @@ def run_baselines(src_dir, seed, cfg: ExperimentConf):
     anomalous_df = anomalous_df.sample(n=cfg.interventional_samples, random_state=seed, replace=False)
     anomalous_df.reset_index(drop=True, inplace=True)
 
+    if PAGERANK in BASELINES:
+        page_rank_r = page_rank.rank_variables(src_dir)
+        result = {**result, **_extract_result(page_rank_r, PAGERANK)}
+
+    if BARO in BASELINES:
+        baro_r = baro.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True))
+        result = {**result, **_extract_result(baro_r, BARO)}
+
+    if SMOOTH_CH in BASELINES:
+        smooth_new_r = smooth.rank_variables(normal_df.copy(deep=True),
+                                                anomalous_df.copy(deep=True),
+                                                src_dir)
+        result = {**result, **_extract_result(smooth_new_r, SMOOTH_CH)}
+
+    if MUTUAL_INFO in BASELINES:
+        mutual_info_r = mt.rank_variables(normal_df.copy(deep=True), anomalous_df.copy(deep=True))
+        result = {**result, **_extract_result(mutual_info_r, MUTUAL_INFO)}
+
     if RCD in BASELINES:
         rcd_r = rcd.top_k_rc(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir,
                             cfg.l_value, None, seed=seed, oracle=False, localized=True, verbose=cfg.verbose)
         result = {**result, **_extract_result(rcd_r, RCD)}
 
-    # igs_r = igs.run_algo(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir,
-    #                      perfect_ci=False, max_l=cfg.l_value)
-    # result = {**result, **_extract_result(igs_r, 'igs')}
+    if M_IGS in BASELINES:
+        igs_r = m_igs.run_algo(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir,
+                            perfect_ci=False, max_l=cfg.l_value)
+        result = {**result, **_extract_result(igs_r, M_IGS)}
 
     # _oracle = '_oracle' if cfg.oracle else ''
     # for i in range(0, 1):
     #     _kpc_r = ft.run_algo(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir,
     #                          cfg.l_value, i, seed=seed, oracle=cfg.oracle, perfect_ci=False, verbose=cfg.verbose)
     #     result = {**result, **_extract_result(_kpc_r, f'kpc_{i}{_oracle}')}
-
-    if MUTUAL_INFO in BASELINES:
-        mutual_info_r = mt.rank_variables(normal_df.copy(deep=True), anomalous_df.copy(deep=True))
-        result = {**result, **_extract_result(mutual_info_r, MUTUAL_INFO)}
-
-    if PAGERANK in BASELINES:
-        page_rank_r = page_rank.rank_variables(src_dir)
-        result = {**result, **_extract_result(page_rank_r, PAGERANK)}
 
     # for i in [0, 1]:
     #     _ikpc_r = ikpc.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
@@ -126,28 +141,18 @@ def run_baselines(src_dir, seed, cfg: ExperimentConf):
     # mci_r = mci.rank_variables(normal_df.copy(deep=True), anomalous_df.copy(deep=True))
     # result = {**result, **_extract_result(mci_r, 'mci')}
 
-    if SMOOTH_CH in BASELINES:
-        smooth_new_r = smooth.rank_variables(normal_df.copy(deep=True),
-                                                anomalous_df.copy(deep=True),
-                                                src_dir)
-        result = {**result, **_extract_result(smooth_new_r, SMOOTH_CH)}
-
     # random_r = random_selection.rank_variables(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir)
     # result = {**result, **_extract_result(random_r, 'random')}
 
-    # for i in [-1]:
-    #     alpha_r = cpdag_rca.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
-    #                             src_dir, cfg.l_value, k=i, oracle=cfg.oracle)
-    #     result = {**result, **_extract_result(alpha_r, f'alpha_{i}')}
+    if RCG_CPDAG in BASELINES:
+        alpha_r = rcg.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
+                                src_dir, cfg.l_value, k=-1, oracle=cfg.oracle)
+        result = {**result, **_extract_result(alpha_r, RCG_CPDAG)}
 
     if RCG_DAG in BASELINES:
         rcg_dag_r = rcg.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
                             src_dir, cfg.l_value, dag=True)
         result = {**result, **_extract_result(rcg_dag_r, RCG_DAG)}
-
-    if BARO in BASELINES:
-        baro_r = baro.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True))
-        result = {**result, **_extract_result(baro_r, BARO)}
 
     if cfg.verbose:
         print(f"Output: {result}")

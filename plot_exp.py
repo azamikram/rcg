@@ -11,79 +11,28 @@ FONT_SIZE = 14
 
 L = 'l'
 
-# PC = 'psi_pc'
 RCD = 'rcd'
-# RCD_ORACLE = 'rcd_oracle'
-# ESSENTIAL = 'essential'
-# KPC_ORACLE_0 = 'kpc_0_oracle'
-# KPC_ORACLE_1 = 'kpc_1_oracle'
-# KPC_ORACLE_2 = 'kpc_2_oracle'
-# KPC_0 = 'kpc_0'
-# KPC_1 = 'kpc_1'
-# KPC_2 = 'kpc_2'
-# ORIENT_0 = 'orient_0'
-# ORIENT_1 = 'orient_1'
-# ORIENT_2 = 'orient_2'
 MUTUAL_INFO = 'mutual_info'
-# MI_GRAPH = 'mi_graph'
-# MI_GRAPH_ORACLE = 'mi_graph_oracle'
-# MARGINAL_CI = 'mci'
-# ESSENTIAL_ORACLE = 'ikpc_-1'
-# BOOSTED_ESSENTIAL_ORACLE = 'boosted_ikpc_-1'
-# ESSENTIAL_ORACLE_POSSIBLE_PARENTS = 'ikpc_-1_parents'
-# ESSENTIAL_ORACLE_NEW = 'ikpc_-1_new'
-# ALPHA_CPDAG = 'alpha_-1'
-# ALPHA_0 = 'alpha_0'
-# ALPHA_1 = 'alpha_1'
-# IKPC_0 = 'ikpc_0'
-# IKPC_1 = 'ikpc_1'
-# IKPC_2 = 'ikpc_2'
-# CMI_DAG = 'cmi_dag'
-# CMI_0 = 'cmi_0'
-# CMI_1 = 'cmi_1'
-# MI_CMI_0 = 'mi_cmi_0'
-# MI_CMI_1 = 'mi_cmi_1'
-# MI_CMI_DAG = 'mi_cmi_dag'
-# IGS = 'igs'
+M_IGS = 'm_igs'
 PAGERANK = 'page_rank'
-# RANDOM = 'random'
-# TOCA = 'toca'
-# BOSS = 'boss'
 BARO = 'baro'
 SMOOTH_CH = 'smooth'
+RCG_CPDAG = 'rcg_cpdag'
 RCG_DAG = 'rcg_dag'
 
-# KL_IKPC = 'kl_ikpc_2'
-# MI_IKPC = 'kl_ikpc_2'
-
 PREFIXES = {
-    # 'TOCA': TOCA,
-    # 'Random': RANDOM,
-    # 'BOSS': BOSS,
     'RUN': PAGERANK,
     'BARO': BARO,
-    # # 'psi-PC': PC,
     'MI': MUTUAL_INFO,
     'SMOOTH': SMOOTH_CH,
     'RCD': RCD,
-    # 'M-IGS': IGS,
-    # 'RCD (oracle)': RCD_ORACLE,
-    # 'Essential': ESSENTIAL,
-    # 'kPC+MI': KPC_0,
-    # '1-PC': KPC_1,
-    # '2-PC': KPC_2,
-    # 'kPC+MI (oracle)': KPC_ORACLE_0,
-    # '1-PC (oracle)': KPC_ORACLE_1,
-    # '2-PC (oracle)': KPC_ORACLE_2,
+    'M-IGS': M_IGS,
     # 'RCG-0': IKPC_0,
     # 'RCG-1': IKPC_1,
     # 'RCG-2': IKPC_2,
-    # # 'O-RCG': ESSENTIAL_ORACLE,
-    # 'T-RCG': ESSENTIAL_ORACLE_POSSIBLE_PARENTS,
-    # # 'RCG++': ESSENTIAL_ORACLE_NEW,
     # 'RCG-0': ALPHA_0,
     # 'RCG-1': ALPHA_1,
-    # 'RCG(CPDAG)': ALPHA_CPDAG,
+    'RCG(CPDAG)': RCG_CPDAG,
     'RCG(DAG)': RCG_DAG,
 }
 
