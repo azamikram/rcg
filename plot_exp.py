@@ -17,6 +17,8 @@ M_IGS = 'm_igs'
 PAGERANK = 'page_rank'
 BARO = 'baro'
 SMOOTH_CH = 'smooth'
+RCG_0 = 'rcg_0'
+RCG_1 = 'rcg_1'
 RCG_CPDAG = 'rcg_cpdag'
 RCG_DAG = 'rcg_dag'
 
@@ -27,11 +29,8 @@ PREFIXES = {
     'SMOOTH': SMOOTH_CH,
     'RCD': RCD,
     'M-IGS': M_IGS,
-    # 'RCG-0': IKPC_0,
-    # 'RCG-1': IKPC_1,
-    # 'RCG-2': IKPC_2,
-    # 'RCG-0': ALPHA_0,
-    # 'RCG-1': ALPHA_1,
+    'RCG-0': RCG_0,
+    'RCG-1': RCG_1,
     'RCG(CPDAG)': RCG_CPDAG,
     'RCG(DAG)': RCG_DAG,
 }

@@ -31,6 +31,8 @@ MUTUAL_INFO = 'mutual_info'
 RCD = 'rcd'
 M_IGS = 'm_igs'
 SMOOTH_CH = 'smooth'
+RCG_0 = 'rcg_0'
+RCG_1 = 'rcg_1'
 RCG_CPDAG = 'rcg_cpdag'
 RCG_DAG = 'rcg_dag'
 
@@ -41,7 +43,9 @@ BASELINES = [
     # RCD,
     # SMOOTH_CH,
     # M_IGS,
-    RCG_CPDAG
+    RCG_0,
+    RCG_1,
+    # RCG_CPDAG,
     # RCG_DAG,
 ]
 
@@ -98,51 +102,15 @@ def run_baselines(src_dir, seed, cfg: ExperimentConf):
                             perfect_ci=False, max_l=cfg.l_value)
         result = {**result, **_extract_result(igs_r, M_IGS)}
 
-    # _oracle = '_oracle' if cfg.oracle else ''
-    # for i in range(0, 1):
-    #     _kpc_r = ft.run_algo(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir,
-    #                          cfg.l_value, i, seed=seed, oracle=cfg.oracle, perfect_ci=False, verbose=cfg.verbose)
-    #     result = {**result, **_extract_result(_kpc_r, f'kpc_{i}{_oracle}')}
+    if RCG_0 in BASELINES:
+        alpha_r = rcg.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
+                                src_dir, cfg.l_value, k=0, oracle=cfg.oracle)
+        result = {**result, **_extract_result(alpha_r, RCG_0)}
 
-    # for i in [0, 1]:
-    #     _ikpc_r = ikpc.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
-    #                        src_dir, k=i, oracle=cfg.oracle)
-    #     result = {**result, **_extract_result(_ikpc_r, f'ikpc_{i}')}
-
-        # _ikpc_r = ikpc.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
-        #                    src_dir, k=i, oracle=cfg.oracle, boosted=True)
-        # result = {**result, **_extract_result(_ikpc_r, f'boosted_ikpc_{i}')}
-
-        # _ikpc_r = ikpc.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
-        #             src_dir, k=i, oracle=cfg.oracle, parents=True)
-        # result = {**result, **_extract_result(_ikpc_r, f'ikpc_{i}_parents')}
-
-        # _ikpc_r = ikpc.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
-        #             src_dir, k=i, oracle=cfg.oracle, new_rank=True)
-        # result = {**result, **_extract_result(_ikpc_r, f'ikpc_{i}_new')}
-
-    # for i in range(0, 2):
-    #     cmi_graph_r = cmi.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir, k=i)
-    #     result = {**result, **_extract_result(cmi_graph_r, f'cmi_{i}')}
-
-    #     cmi_graph_r = mi_cmi.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir, k=i)
-    #     result = {**result, **_extract_result(cmi_graph_r, f'mi_cmi_{i}')}
-
-    # cmi_graph_r = cmi.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir, k=None)
-    # result = {**result, **_extract_result(cmi_graph_r, f'cmi_dag')}
-
-    # mi_cmi_graph_r = mi_cmi.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir, k=None)
-    # result = {**result, **_extract_result(mi_cmi_graph_r, f'mi_cmi_dag')}
-
-    # mi_graph_r = mi_graph.rank_variables(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
-    #                                      cfg.l_value, src_dir, oracle=cfg.oracle)
-    # result = {**result, **_extract_result(mi_graph_r, f'mi_graph{_oracle}')}
-
-    # mci_r = mci.rank_variables(normal_df.copy(deep=True), anomalous_df.copy(deep=True))
-    # result = {**result, **_extract_result(mci_r, 'mci')}
-
-    # random_r = random_selection.rank_variables(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir)
-    # result = {**result, **_extract_result(random_r, 'random')}
+    if RCG_1 in BASELINES:
+        alpha_r = rcg.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
+                                src_dir, cfg.l_value, k=1, oracle=cfg.oracle)
+        result = {**result, **_extract_result(alpha_r, RCG_1)}
 
     if RCG_CPDAG in BASELINES:
         alpha_r = rcg.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
