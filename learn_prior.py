@@ -8,7 +8,7 @@ from config import LearnPriorConf, load_config
 DEFAULT_CONFIG = 'learn_prior.yaml'
 
 
-def learn_cpc(src_dir, cfg: LearnPriorConf):
+def learn_prior(src_dir, cfg: LearnPriorConf):
     if cfg.threading:
         t_pool = Pool(cfg.workers)
 
@@ -41,5 +41,5 @@ if __name__ == '__main__':
     cfg: LearnPriorConf = load_config(DEFAULT_CONFIG, LearnPriorConf)
 
     s_time = bu.current_time()
-    learn_cpc(path, cfg)
+    learn_prior(path, cfg)
     print(f'Learning prior took {round(bu.current_time() - s_time, 3)} sec')
