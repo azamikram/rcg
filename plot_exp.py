@@ -24,7 +24,7 @@ L = 'l'
 # ORIENT_0 = 'orient_0'
 # ORIENT_1 = 'orient_1'
 # ORIENT_2 = 'orient_2'
-# MUTUAL_INFO = 'mutual_info'
+MUTUAL_INFO = 'mutual_info'
 # MI_GRAPH = 'mi_graph'
 # MI_GRAPH_ORACLE = 'mi_graph_oracle'
 # MARGINAL_CI = 'mci'
@@ -49,7 +49,7 @@ PAGERANK = 'page_rank'
 # RANDOM = 'random'
 # TOCA = 'toca'
 # BOSS = 'boss'
-# BARO = 'baro'
+BARO = 'baro'
 SMOOTH_CH = 'smooth'
 RCG_DAG = 'rcg_dag'
 
@@ -61,9 +61,9 @@ PREFIXES = {
     # 'Random': RANDOM,
     # 'BOSS': BOSS,
     'RUN': PAGERANK,
-    # # 'BARO': BARO,
+    'BARO': BARO,
     # # 'psi-PC': PC,
-    # 'MI': MUTUAL_INFO,
+    'MI': MUTUAL_INFO,
     'SMOOTH': SMOOTH_CH,
     # 'RCD': RCD,
     # 'M-IGS': IGS,

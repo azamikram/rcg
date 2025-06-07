@@ -7,7 +7,7 @@ import pandas as pd
 
 # from rcd import two_phase as rcd
 # import find_root_cause as ft
-# import mutual_info as mt
+import mutual_info as mt
 # import marginal_ci as mci
 # import ikpc
 # import cmi
@@ -19,19 +19,23 @@ import page_rank
 # import random_selection
 # import boss
 import rcg
-# import baro
+import baro
 import smooth
 
 from utils import base_utils as bu
 from config import ExperimentConf, load_config, dump_config
 
-RCG_DAG = 'rcg_dag'
 PAGERANK = 'page_rank'
+BARO = 'baro'
+MUTUAL_INFO = 'mutual_info'
 SMOOTH_CH = 'smooth'
+RCG_DAG = 'rcg_dag'
 
 BASELINES = [
-    PAGERANK,
-    SMOOTH_CH,
+    # PAGERANK,
+    BARO,
+    MUTUAL_INFO,
+    # SMOOTH_CH,
     # RCG_DAG,
 ]
 
@@ -74,8 +78,9 @@ def run_baselines(src_dir, seed, cfg: ExperimentConf):
     #                          cfg.l_value, i, seed=seed, oracle=cfg.oracle, perfect_ci=False, verbose=cfg.verbose)
     #     result = {**result, **_extract_result(_kpc_r, f'kpc_{i}{_oracle}')}
 
-    # mutual_info_r = mt.rank_variables(normal_df.copy(deep=True), anomalous_df.copy(deep=True))
-    # result = {**result, **_extract_result(mutual_info_r, 'mutual_info')}
+    if MUTUAL_INFO in BASELINES:
+        mutual_info_r = mt.rank_variables(normal_df.copy(deep=True), anomalous_df.copy(deep=True))
+        result = {**result, **_extract_result(mutual_info_r, MUTUAL_INFO)}
 
     if PAGERANK in BASELINES:
         page_rank_r = page_rank.rank_variables(src_dir)
@@ -148,8 +153,9 @@ def run_baselines(src_dir, seed, cfg: ExperimentConf):
                             src_dir, cfg.l_value, dag=True)
         result = {**result, **_extract_result(rcg_dag_r, RCG_DAG)}
 
-    # baro_r = baro.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True))
-    # result = {**result, **_extract_result(baro_r, 'baro')}
+    if BARO in BASELINES:
+        baro_r = baro.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True))
+        result = {**result, **_extract_result(baro_r, BARO)}
 
     if cfg.verbose:
         print(f"Output: {result}")
