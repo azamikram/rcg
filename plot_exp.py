@@ -12,7 +12,7 @@ FONT_SIZE = 14
 L = 'l'
 
 # PC = 'psi_pc'
-# RCD = 'rcd'
+RCD = 'rcd'
 # RCD_ORACLE = 'rcd_oracle'
 # ESSENTIAL = 'essential'
 # KPC_ORACLE_0 = 'kpc_0_oracle'
@@ -65,7 +65,7 @@ PREFIXES = {
     # # 'psi-PC': PC,
     'MI': MUTUAL_INFO,
     'SMOOTH': SMOOTH_CH,
-    # 'RCD': RCD,
+    'RCD': RCD,
     # 'M-IGS': IGS,
     # 'RCD (oracle)': RCD_ORACLE,
     # 'Essential': ESSENTIAL,

@@ -5,7 +5,7 @@ from multiprocessing import Pool
 
 import pandas as pd
 
-# from rcd import two_phase as rcd
+import rcd
 # import find_root_cause as ft
 import mutual_info as mt
 # import marginal_ci as mci
@@ -28,6 +28,7 @@ from config import ExperimentConf, load_config, dump_config
 PAGERANK = 'page_rank'
 BARO = 'baro'
 MUTUAL_INFO = 'mutual_info'
+RCD = 'rcd'
 SMOOTH_CH = 'smooth'
 RCG_DAG = 'rcg_dag'
 
@@ -35,6 +36,7 @@ BASELINES = [
     # PAGERANK,
     BARO,
     MUTUAL_INFO,
+    RCD,
     # SMOOTH_CH,
     # RCG_DAG,
 ]
@@ -64,9 +66,10 @@ def run_baselines(src_dir, seed, cfg: ExperimentConf):
     anomalous_df = anomalous_df.sample(n=cfg.interventional_samples, random_state=seed, replace=False)
     anomalous_df.reset_index(drop=True, inplace=True)
 
-    # rcd_r = rcd.top_k_rc(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir,
-    #                      cfg.l_value, None, seed=seed, oracle=False, localized=True, verbose=cfg.verbose)
-    # result = {**result, **_extract_result(rcd_r, f'rcd')}
+    if RCD in BASELINES:
+        rcd_r = rcd.top_k_rc(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir,
+                            cfg.l_value, None, seed=seed, oracle=False, localized=True, verbose=cfg.verbose)
+        result = {**result, **_extract_result(rcd_r, RCD)}
 
     # igs_r = igs.run_algo(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir,
     #                      perfect_ci=False, max_l=cfg.l_value)
@@ -123,25 +126,14 @@ def run_baselines(src_dir, seed, cfg: ExperimentConf):
     # mci_r = mci.rank_variables(normal_df.copy(deep=True), anomalous_df.copy(deep=True))
     # result = {**result, **_extract_result(mci_r, 'mci')}
 
-    # smooth_traverse_r = toca.rank_variables(normal_df.copy(deep=True),
-    #                                         anomalous_df.copy(deep=True),
-    #                                         path=src_dir)
-    # result = {**result, **_extract_result(smooth_traverse_r, 'smooth_full')}
-
     if SMOOTH_CH in BASELINES:
         smooth_new_r = smooth.rank_variables(normal_df.copy(deep=True),
                                                 anomalous_df.copy(deep=True),
                                                 src_dir)
         result = {**result, **_extract_result(smooth_new_r, SMOOTH_CH)}
 
-    # toca_r = toca.rank_variables(normal_df.copy(deep=True), anomalous_df.copy(deep=True), path=src_dir)
-    # result = {**result, **_extract_result(toca_r, 'toca')}
-
     # random_r = random_selection.rank_variables(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir)
     # result = {**result, **_extract_result(random_r, 'random')}
-
-    # boss_r = boss.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True), src_dir)
-    # result = {**result, **_extract_result(boss_r, 'boss')}
 
     # for i in [-1]:
     #     alpha_r = cpdag_rca.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
