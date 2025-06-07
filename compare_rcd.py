@@ -14,7 +14,7 @@ import pandas as pd
 # import mi_cmi
 # import mi_graph
 # import igs
-# import page_rank
+import page_rank
 # import toca
 # import random_selection
 # import boss
@@ -24,6 +24,16 @@ import smooth
 
 from utils import base_utils as bu
 from config import ExperimentConf, load_config, dump_config
+
+RCG_DAG = 'rcg_dag'
+PAGERANK = 'page_rank'
+SMOOTH_CH = 'smooth'
+
+BASELINES = [
+    PAGERANK,
+    SMOOTH_CH,
+    # RCG_DAG,
+]
 
 RESULT_DIR = 'exp_results'
 DEFAULT_CONFIG = 'experiments.yaml'
@@ -67,8 +77,9 @@ def run_baselines(src_dir, seed, cfg: ExperimentConf):
     # mutual_info_r = mt.rank_variables(normal_df.copy(deep=True), anomalous_df.copy(deep=True))
     # result = {**result, **_extract_result(mutual_info_r, 'mutual_info')}
 
-    # page_rank_r = page_rank.rank_variables(src_dir)
-    # result = {**result, **_extract_result(page_rank_r, 'page_rank')}
+    if PAGERANK in BASELINES:
+        page_rank_r = page_rank.rank_variables(src_dir)
+        result = {**result, **_extract_result(page_rank_r, PAGERANK)}
 
     # for i in [0, 1]:
     #     _ikpc_r = ikpc.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
@@ -112,10 +123,11 @@ def run_baselines(src_dir, seed, cfg: ExperimentConf):
     #                                         path=src_dir)
     # result = {**result, **_extract_result(smooth_traverse_r, 'smooth_full')}
 
-    smooth_new_r = smooth.rank_variables(normal_df.copy(deep=True),
-                                              anomalous_df.copy(deep=True),
-                                              src_dir)
-    result = {**result, **_extract_result(smooth_new_r, 'smooth')}
+    if SMOOTH_CH in BASELINES:
+        smooth_new_r = smooth.rank_variables(normal_df.copy(deep=True),
+                                                anomalous_df.copy(deep=True),
+                                                src_dir)
+        result = {**result, **_extract_result(smooth_new_r, SMOOTH_CH)}
 
     # toca_r = toca.rank_variables(normal_df.copy(deep=True), anomalous_df.copy(deep=True), path=src_dir)
     # result = {**result, **_extract_result(toca_r, 'toca')}
@@ -131,9 +143,10 @@ def run_baselines(src_dir, seed, cfg: ExperimentConf):
     #                             src_dir, cfg.l_value, k=i, oracle=cfg.oracle)
     #     result = {**result, **_extract_result(alpha_r, f'alpha_{i}')}
 
-    rcg_dag_r = rcg.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
-                        src_dir, cfg.l_value, dag=True)
-    result = {**result, **_extract_result(rcg_dag_r, f'rcg_dag')}
+    if RCG_DAG in BASELINES:
+        rcg_dag_r = rcg.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True),
+                            src_dir, cfg.l_value, dag=True)
+        result = {**result, **_extract_result(rcg_dag_r, RCG_DAG)}
 
     # baro_r = baro.run(normal_df.copy(deep=True), anomalous_df.copy(deep=True))
     # result = {**result, **_extract_result(baro_r, 'baro')}

@@ -45,12 +45,12 @@ L = 'l'
 # MI_CMI_1 = 'mi_cmi_1'
 # MI_CMI_DAG = 'mi_cmi_dag'
 # IGS = 'igs'
-# PAGERANK = 'page_rank'
+PAGERANK = 'page_rank'
 # RANDOM = 'random'
 # TOCA = 'toca'
 # BOSS = 'boss'
 # BARO = 'baro'
-# SMOOTH_CH = 'smooth_new'
+SMOOTH_CH = 'smooth'
 RCG_DAG = 'rcg_dag'
 
 # KL_IKPC = 'kl_ikpc_2'
@@ -60,11 +60,11 @@ PREFIXES = {
     # 'TOCA': TOCA,
     # 'Random': RANDOM,
     # 'BOSS': BOSS,
-    # # 'RUN': PAGERANK,
+    'RUN': PAGERANK,
     # # 'BARO': BARO,
     # # 'psi-PC': PC,
     # 'MI': MUTUAL_INFO,
-    # 'SMOOTH': SMOOTH_CH,
+    'SMOOTH': SMOOTH_CH,
     # 'RCD': RCD,
     # 'M-IGS': IGS,
     # 'RCD (oracle)': RCD_ORACLE,
@@ -85,16 +85,6 @@ PREFIXES = {
     # 'RCG-1': ALPHA_1,
     # 'RCG(CPDAG)': ALPHA_CPDAG,
     'RCG(DAG)': RCG_DAG,
-    # 'RCG-B': BOOSTED_ESSENTIAL_ORACLE,
-    # 'RCG(DAG)': CMI_DAG,
-    # 'CMI-0': CMI_0,
-    # 'CMI-1': CMI_1,
-    # 'MI+CMI-0': MI_CMI_0,
-    # 'MI+CMI-1': MI_CMI_1,
-    # 'MI+CMI (DAG)': MI_CMI_DAG
-    # 'MI+kPC': MI_GRAPH,
-    # 'MI+kPC (oracle)': MI_GRAPH_ORACLE,
-    # 'Marginal CI': MARGINAL_CI,
 }
 
 DATA_CSV = 'data.csv'
@@ -290,6 +280,7 @@ def int_samples_plot(data, dir, save, y_attr):
 
 def top_k_multiple_nodes(data, dir, **kwargs):
     save = kwargs['save']
+    print(f'{save=}')
     xc_limit = kwargs['xc_limit']
     _top_k_plot(data, dir, save, 'nodes', 'Nodes', xc_limit)
 
