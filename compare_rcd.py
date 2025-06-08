@@ -37,16 +37,18 @@ RCG_CPDAG = 'rcg_cpdag'
 RCG_DAG = 'rcg_dag'
 
 BASELINES = [
-    # PAGERANK,
-    # BARO,
-    # MUTUAL_INFO,
-    # RCD,
-    # SMOOTH_CH,
-    # M_IGS,
-    RCG_0,
-    RCG_1,
-    # RCG_CPDAG,
-    # RCG_DAG,
+    PAGERANK,
+    BARO,
+    MUTUAL_INFO,
+    SMOOTH_CH,
+    RCD,
+    M_IGS,
+    RCG_CPDAG,
+    RCG_DAG,
+    
+    # For the sampled version
+    # RCG_0,
+    # RCG_1,
 ]
 
 RESULT_DIR = 'exp_results'

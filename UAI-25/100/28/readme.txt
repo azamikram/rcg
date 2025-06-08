@@ -1,0 +1,1 @@
+{"seed": 28, "nodes": 100, "states": 2, "samples": 10000, "graph_density": 2, "verbose": false}

@@ -1,0 +1,1 @@
+{"graph_gen_conf": {"seed": 0, "nodes": 0, "states": 2, "samples": 10000, "graph_density": 2, "verbose": false}, "params": {"n": 100, "nodes": [10, 25, 50, 75, 100], "threading": true, "workers": 14, "verbose": true}}
