@@ -48,8 +48,6 @@ Visualize experiment results using `plot_exp.py`.
 
 ## Reproducing Results from the Paper
 
-## Reproducing Results from the Paper
-
 To facilitate reproducibility, we have included the dataset used in our paper. It is available in the `UAI-25-dataset` directory.
 
 To reproduce the results shown in the paper, run the following commands:
