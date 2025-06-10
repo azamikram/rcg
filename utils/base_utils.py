@@ -32,6 +32,9 @@ def readable_time():
 def get_node_name(node):
     return f'X{node}'
 
+def get_nodes_dir_name(nodes):
+    return f'{nodes}-nodes'
+
 def get_prior_graph_name(k, oracle):
     if oracle and k == -1: return 'oracle-cpdag'
     return f"{'oracle' if oracle else 'sample'}-{k}"
@@ -49,20 +52,22 @@ def load_graph(path):
     return graph
 load_data = load_graph
 
-# Iterate over all the files in the given directory
-# and output directories that have integer as their name
+# Iterate over all the directories in the given path that have the format 
+# {int}-{str}. A directory that does not start with a leading integer will
+# be ignored. The yielded results are sorted by the leading integer.
 def dir_iterator(path):
-    sorted_files = list()
+    sorted_dirs = list()
     for f in os.listdir(path):
         try:
-            sorted_files.append(int(f))
+            _int, _str = f.split('-')
+            sorted_dirs.append(f)
         except:
             pass
-    sorted_files.sort()
-    for f in sorted_files:
+    sorted_dirs = sorted(sorted_dirs, key=lambda s: int(s.split('-')[0]))
+    for f in sorted_dirs:
         p_path = f'{path}/{f}'
         if not os.path.isdir(p_path): continue
-        yield(f, p_path)
+        yield(f.split('-')[0], p_path)
 
 def add_fnode(normal_df, anomalous_df):
     normal_df[F_NODE] = 0

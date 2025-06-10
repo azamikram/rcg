@@ -196,7 +196,7 @@ def different_int_samples(src_dir, cfg: ExperimentConf):
         df_counter += 1
 
     node = '25'
-    n_path = os.path.join(src_dir, node)
+    n_path = os.path.join(src_dir, bu.get_nodes_dir_name(node))
     for _int_sample in cfg.int_samples:
         print(f"Running the experiment with {_int_sample} interventional samples")
         cfg.l_value = 1 # top-1

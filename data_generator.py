@@ -24,7 +24,7 @@ def generate_data(cfg: DataGenConf):
     for node in params.nodes:
         if params.verbose:
             print(f'Generating data for {node} nodes')
-        p_path = f'{src_dir}/{node}'
+        p_path = f'{src_dir}/{bu.get_nodes_dir_name(node)}'
         os.mkdir(p_path)
         if params.threading:
             future = list()
@@ -34,7 +34,7 @@ def generate_data(cfg: DataGenConf):
                 _g_cfg = copy.deepcopy(graph_cfg)
                 _g_cfg.seed = i
                 future.append(t_pool.starmap_async(graph_gen.generate_graph,
-                                                   [(_g_cfg, f'{p_path}/{i}')]))
+                                                   [(_g_cfg, f'{p_path}/{i}-sample')]))
             else:
                 graph_cfg.seed = i
                 graph_gen.generate_graph(graph_cfg, f'{p_path}/{i}')
