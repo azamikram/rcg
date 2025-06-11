@@ -30,8 +30,8 @@ Before running RCG(CPDAG), we need to learn the true CPDAG:
 Run `compare_rcd.py` to execute RCG and other baselines:
 
 - **Experiment types**:
-  - Vary the number of nodes and evaluate top-$l$ accuracy (see Figure 3a and Figure 8).
-  - Vary the number of anomalous samples and evaluate top-1 accuracy (see Figure 3b and Figure 9).
+  - Vary the number of nodes and evaluate top-$l$ accuracy (see Figure 4(a)).
+  - Vary the number of anomalous samples and evaluate top-1 accuracy (see Figure 4(b)).
 
 Use the `--exp` flag to switch between experiment types. Possible values are `1` and `2`.
 
@@ -53,18 +53,18 @@ To facilitate reproducibility, we have included the dataset used in our paper. I
 To reproduce the results shown in the paper, run the following commands:
 
 ```bash
-# Reproduce results for Figure 3a
+# Reproduce results for Figure 4(a)
 python3 compare_rcd.py --path UAI-25-dataset --exp 1
 python3 plot_exp.py --path UAI-25-dataset/exp_results/{PATH} --exp 1
 
-# Reproduce results for Figure 3b
+# Reproduce results for Figure 4(b)
 python3 compare_rcd.py --path UAI-25-dataset --exp 2
 python3 plot_exp.py --path UAI-25-dataset/exp_results/{PATH} --exp 2
 ```
 
 Replace `{PATH}` with the specific subdirectory created during the experiment run.
 
-The final plots used in the paper can be found in `UAI-25-dataset/exp_results/3a` and `UAI-25-dataset/exp_results/3b`.
+The final plots used in the paper can be found in `UAI-25-dataset/exp_results/nodes` and `UAI-25-dataset/exp_results/int-samples`.
 
 ---
 

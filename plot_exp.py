@@ -46,17 +46,16 @@ GRAPH_LABELS = {
 
 # COLORS = ['C1', 'C0']
 # For oracle version
-COLORS = ['C3', 'C4', 'C1', 'C6', 'C0', 'C5', 'C2']
-# For sample version
-# COLORS = ['C4', 'C3', 'C1', 'C0', 'C2']
+
+# For Figure 4(a)
+COLORS = ['C3', 'C4', 'C5', 'C6', 'C7', 'C1', 'C0', 'C2']
 MARKERS = ['o', 's', '^', 'o', 'x', 'D', 'P']
+
+# For Figure 4(b)
+# COLORS = ['C5', 'C6', 'C7', 'C0', 'C2']
+# MARKERS = ['^', 'o', 'x', 'P', 'o']
+
 LINE_STYLES = ['--', '-.', ':']
-
-# For int samples
-# COLORS = ['C1', 'C0', 'C2']
-# MARKERS = ['^', 'x', 'P']
-LINE_STYLES = [':', '--', ':']
-
 
 # ============================= Private methods =============================
 
@@ -152,7 +151,7 @@ def _k_plots(data, labels, err=None, xlabel='', ylabel='',
     axs[0].set_ylabel(ylabel)
 
     fig.legend(all_handles, all_labels, loc='upper center', fancybox=True,
-               ncol=7, bbox_to_anchor=(0.5, 1.01), fontsize=FONT_SIZE)
+               ncol=8, bbox_to_anchor=(0.5, 1.01), fontsize=FONT_SIZE)
 
     # plt.legend(loc='upper left', bbox_to_anchor=(0, 1),
     #            borderaxespad=0, fancybox=True, shadow=True, ncol=1)
@@ -220,7 +219,7 @@ def int_samples_plot(data, dir, save, y_attr):
         err[key] = std_err[label].values.tolist()
 
     _line_plot(data, f, err=err,
-               xlabel='Samples', ylabel=GRAPH_LABELS[y_attr],
+               xlabel='Samples', ylabel=(GRAPH_LABELS[y_attr] if y_attr == 'time' else 'Top-1 Accuracy'),
                xc_limit=xc_limit, log_scale=(y_attr == 'time'))
     _save_or_show(f"{attr}_{y_attr}.pdf")
 
