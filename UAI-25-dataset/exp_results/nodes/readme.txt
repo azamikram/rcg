@@ -1,0 +1,1 @@
+{"anomalous_samples": 1000, "oracle": true, "L": [1, 3, 5], "int_samples": [10, 100, 1000, 10000], "workers": 14, "threading": true, "verbose": false, "l_value": 1, "interventional_samples": 100}
